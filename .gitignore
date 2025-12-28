@@ -1,0 +1,6 @@
+#to avoid pushing virtual environment of this project
+project_env/
+
+
+#To avoid pushing .env file where there is my  databse credentials
+.env

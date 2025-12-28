@@ -11,6 +11,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Annotated
 import os
 from dotenv import load_dotenv  #NOTE: this is required to get system env data
+from pathlib import Path
 from jose import jwt,JWTError
 
 #------------------------------------------------------------------------------------------------
@@ -20,10 +21,12 @@ router  = APIRouter(    #NOTE: This helps to separate the routes of authenticati
     tags=['Authentication']
 )
 #------------------------------------------------------------------------------------------------
+# Suppose your .env is inside a subfolder, e.g., "project_env"
+env_path = Path(__file__).parent / "project_env" / ".env"
 
 
 #------------------------------------------------------------------------------------------------
-load_dotenv()   #loads variable from .env
+load_dotenv(dotenv_path=env_path)   #loads variable from .env
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM =  os.environ.get("ALGORITHM" , "HS256")  #("Variable_Name", "default_algorithm_ifNOTfound")
 #------------------------------------------------------------------------------------------------
@@ -124,6 +127,7 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta):
         "id"  : user_id,
         "exp" : datetime.utcnow() + expires_delta
     }
+
     if not SECRET_KEY:
         raise RuntimeError("SECRET_KEY is not set in environment variables")
 
@@ -133,10 +137,12 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta):
 # #NOTE : Allowing authorized users to access the protected routes
 # ----------------------------------------------------------------------------------------------
 def get_current_user(
-    token: Annotated[str, Depends(oauth2_bearer)],
-    db: db_dependency
+    token: Annotated[str, Depends(oauth2_bearer)],  #NOTE : since token obtained by oauth2_bearer is 
+    # of string datatype so we use str and this is actually used later on in the try: section
+
+    db: db_dependency#NOTE: this is later on used for fetching the info of user from DB
 ):
-    credentials_exception = HTTPException(
+    credentials_exception = HTTPException(  #NOTE: this occurs when an application fails to verify the logged in user's information
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
@@ -144,10 +150,11 @@ def get_current_user(
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        user_id: int = payload.get("id")
+        username: str = payload.get("sub")  #this retrieves username from the payload
+        user_id: int = payload.get("id")    #this retrieves user_id from the payload 
 
-        if username is None or user_id is None:
+        if username is None or user_id is None:     #this ensures if username and user_id exists which is 
+            #mentioned in the payload otherwise raise error
             raise credentials_exception
 
     except JWTError:
@@ -160,8 +167,12 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
-    return user
+    return user #this fetches the data of that particular user from the Database.
 
+
+#---------------------------------------------------------------------------------------
+#NOTE:  This is for allowing user to access the details of data who has tokens 
+#---------------------------------------------------------------------------------------
 
 @router.get("/me")
 async def read_own_profile(current_user: Annotated[UserRegistration, Depends(get_current_user)]):
@@ -172,3 +183,5 @@ async def read_own_profile(current_user: Annotated[UserRegistration, Depends(get
         "gender": current_user.gender,
         "contact_no": current_user.contact_no
     }
+
+#-------------------------------------------------------------------------------------------------------------------------------
