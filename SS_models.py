@@ -20,10 +20,3 @@ class UserRegistration(Base):
     iv) Image
 '''
 
-# class UserBase(Base):
-#     __tablename__ = "UserBase"
-#     username= Column(String(50), nullable=False)
-#     user_id = Column(Integer, nullable=False)
-#     caption = Column(String(100), nullable=False)
-#     Date = Column(DateTime, server_default=func.now())
-#     Image = Column(LargeBinary, nullable=True)
