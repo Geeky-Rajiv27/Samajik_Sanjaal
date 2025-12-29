@@ -1,5 +1,5 @@
 from SS_database import Base
-from sqlalchemy import Column, Integer, String, BigInteger,DateTime,func,LargeBinary
+from sqlalchemy import Column, Integer, String, BigInteger,DateTime,func,LargeBinary,ForeignKey
 
 #NOTE : Table 1 (for storing all newly registered user's data)
 class UserRegistration(Base):
@@ -20,10 +20,12 @@ class UserRegistration(Base):
     iv) Image
 '''
 
+
 # class UserBase(Base):
 #     __tablename__ = "UserBase"
 #     username= Column(String(50), nullable=False)
-#     user_id = Column(Integer, nullable=False)
+#     post_id = Column(Integer, nullable=False)
 #     caption = Column(String(100), nullable=False)
 #     Date = Column(DateTime, server_default=func.now())
 #     Image = Column(LargeBinary, nullable=True)
+#     ownerID = Column(Integer, ForeignKey("UserRegistration.id", ondelete="CASCADE"), nullable=False)

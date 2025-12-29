@@ -21,12 +21,12 @@ router  = APIRouter(    #NOTE: This helps to separate the routes of authenticati
     tags=['Authentication']
 )
 #------------------------------------------------------------------------------------------------
-# Suppose your .env is inside a subfolder, e.g., "project_env"
-env_path = Path(__file__).parent / "project_env" / ".env"
+# # Suppose your .env is inside a subfolder, e.g., "project_env"
+# env_path = Path(__file__).parent / "project_env" / ".env"
 
 
 #------------------------------------------------------------------------------------------------
-load_dotenv(dotenv_path=env_path)   #loads variable from .env
+load_dotenv()   #loads variable from .env
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM =  os.environ.get("ALGORITHM" , "HS256")  #("Variable_Name", "default_algorithm_ifNOTfound")
 #------------------------------------------------------------------------------------------------

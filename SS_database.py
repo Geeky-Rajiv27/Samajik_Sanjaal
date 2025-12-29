@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+import os
 
 # Replace USERNAME, PASSWORD, HOST, PORT, DATABASE with your MySQL info
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:rajiv123@localhost:3306/Samajik_Sanjaal"
