@@ -36,3 +36,5 @@ class UserResponse(CreateUser):   # inheriting from the StudentSchema
     model_config = {
         "from_attributes": True
     }
+
+

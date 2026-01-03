@@ -1,13 +1,18 @@
 from fastapi import FastAPI, Depends, HTTPException
-from SS_database import Base, SessionLocal, engine
-from SS_models import UserRegistration
+from app.Database.SS_database import Base, SessionLocal, engine
+from app.models.UserRegistration import UserRegistration
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List
-from SS_schemas import CreateUser,UserResponse
-import SS_Oauth as Oauth
+from app.schemas.RegistrationSchema import CreateUser,UserResponse
+import app.routers.auth as auth
+from app.routers import posts
+# import app.routers.activity as activity
+
+
 from passlib.context import CryptContext
 from fastapi.middleware.cors import CORSMiddleware
+
 
 #---------------------------------------------------------------------------------
 #               CORS SETUP --  CORS setup and endpoint handling in your main.py so your
@@ -34,7 +39,19 @@ app.add_middleware(
 #------------------------------------------------------------------------
 
 Base.metadata.create_all(bind=engine)
-app.include_router(Oauth.router)  #To include the mini app "router" for tokens validation
+
+#------------------------------------------------------------------------
+#NOTE: # Register the Auth routes (register, login, me)
+# These will all start with /auth because of the prefix in auth.py
+app.include_router(auth.router)  #To include the mini app "router" for tokens validation
+
+# Register the Post routes (create, delete, etc.)
+# We add the prefix here or inside posts.py (choose one)
+app.include_router(posts.router)
+
+# Register Activity routes
+# app.include_router(activity.router, prefix="/activity", tags=["Activity"])
+#------------------------------------------------------------------------
 
 #NOTE: creating database session dependency
 def get_db():
@@ -123,17 +140,3 @@ def DeleteUserbyID(User_id: int, db : Session = Depends(get_db)):
     return {
         "Server" : f"User with ID:{User_id} is successfully deleted."
     }
-
-#------------------------------------------------------------------------------------------------
-#NOTE:------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------------------------
-#NOTE:------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------------------------
-#NOTE:------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------
-
-#NOTE: Endpoints for 

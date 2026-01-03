@@ -3,9 +3,9 @@ from fastapi import APIRouter,Depends,HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
-from SS_schemas import CreateUser
-from SS_database import SessionLocal
-from SS_models import UserRegistration
+from app.schemas.RegistrationSchema import CreateUser
+from app.Database.SS_database import SessionLocal
+from app.models.UserRegistration import UserRegistration
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Annotated
@@ -63,7 +63,8 @@ def get_db():
         db.close()
 
 db_dependency = Annotated[Session, Depends(get_db)]
-
+# -------------------------------------------------------------------------------------------------
+#NOTE:                              REGISTRATION - endpoints
 # -------------------------------------------------------------------------------------------------
 #NOTE: The create_user endpoint here is for user registration.
 #Purpose: Let a new user sign up, hash their password, and store it safely in the database.
@@ -170,18 +171,8 @@ def get_current_user(
     return user #this fetches the data of that particular user from the Database.
 
 
-#---------------------------------------------------------------------------------------
-#NOTE:  This is for allowing user to access the details of data who has tokens 
-#---------------------------------------------------------------------------------------
 
-@router.get("/me")
-async def read_own_profile(current_user: Annotated[UserRegistration, Depends(get_current_user)]):
-    return {
-        "id": current_user.id,
-        "username": current_user.username,
-        "email": current_user.email,
-        "gender": current_user.gender,
-        "contact_no": current_user.contact_no
-    }
+
+
 
 #-------------------------------------------------------------------------------------------------------------------------------

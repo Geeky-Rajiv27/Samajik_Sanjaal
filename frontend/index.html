@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samajik_Sanjaal</title>
+
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="hidden" id="navbar">
+        <div class="nav-content">
+            <h1>Samajik_Sanjaal</h1>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Loading Spinner -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="auth-container" id="registerContainer">
+            <div class="auth-box">
+                <h2>Create Account</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" required>
+                        <span class="error-message" id="emailError">Valid email is required</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regUsername">Username</label>
+                        <input type="text" id="regUsername" required>
+                        <span class="error-message" id="usernameError">Username must be at least 3 characters</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regGender">Gender</label>
+                        <select id="regGender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <span class="error-message" id="genderError">Please select a gender</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regContact">Contact Number</label>
+                        <input type="tel" id="regContact" required>
+                        <span class="error-message" id="contactError">Valid contact number is required</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" required>
+                        <span class="error-message" id="passwordError">Password must be at least 6 characters</span>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Register</button>
+
+                    <div class="auth-switch">
+                        Already have an account?
+                        <a href="#" onclick="showLogin(); return false;">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-container hidden" id="loginContainer">
+            <div class="auth-box">
+                <h2>Welcome Back</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginUsername">Username</label>
+                        <input type="text" id="loginUsername" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Login</button>
+
+                    <div class="auth-switch">
+                        Don't have an account?
+                        <a href="#" onclick="showRegister(); return false;">Register</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+
+            <div class="dashboard-header">
+                <h2>Welcome to Samajik_Sanjaal</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search users by name...">
+                    <button onclick="searchUsers()">Search</button>
+                </div>
+            </div>
+
+            <div class="search-results" id="searchResults">
+                <button class="back-button" onclick="hideSearchResults()">← Back to Feed</button>
+                <h3>Search Results</h3>
+                <div id="userResults"></div>
+            </div>
+
+            <div class="profile-view" id="profileView">
+                <button class="back-button" onclick="hideProfile()">← Back to Feed</button>
+                <div class="profile-header">
+                    <div class="profile-name" id="profileName"></div>
+                    <div class="profile-email" id="profileEmail"></div>
+                </div>
+                <h3>Posts</h3>
+                <div class="posts-feed" id="profilePosts"></div>
+            </div>
+
+            <div class="create-post">
+                <h3>Create Post</h3>
+                <form id="createPostForm">
+                    <textarea id="postContent" placeholder="What's on your mind?" required></textarea>
+
+                    <div class="file-input-wrapper">
+                        <label for="postImage" class="file-input-label">📷 Choose Image</label>
+                        <input type="file" id="postImage" accept="image/*">
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Post</button>
+                </form>
+            </div>
+
+            <div class="posts-feed" id="postsFeed"></div>
+        </div>
+    </div>
+
+    <!-- External JS -->
+    <script src="./js/script.js"></script>
+</body>
+</html>
